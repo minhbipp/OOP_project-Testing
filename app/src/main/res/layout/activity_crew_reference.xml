@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#0F111A">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Crew Reference Guide"
+        android:textColor="#00FFCC"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Soldier -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Soldier"
+                android:textColor="#FF4444"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Role: Front-line combatant. High HP and Damage.\nSkill: Enrage - Gains massive damage boost when HP drops below 50%."
+                android:textColor="#CCCCCC"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Medic -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medic"
+                android:textColor="#44FF44"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Role: Support specialist. Essential for keeping squad alive.\nSkill: Heal - Restores significant HP to a wounded ally."
+                android:textColor="#CCCCCC"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Pilot -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pilot"
+                android:textColor="#4444FF"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Role: Agile attacker. High base damage.\nSkill: Evasive Strike - Chance to trigger a powerful second attack."
+                android:textColor="#CCCCCC"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Engineer -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Engineer"
+                android:textColor="#FFFF44"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Role: Defensive support. High resilience.\nSkill: Reinforce - Permanently increases an ally's Max HP during mission."
+                android:textColor="#CCCCCC"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Scientist -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Scientist"
+                android:textColor="#FF44FF"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Role: Strategic analyst.\nSkill: Analyse - Permanently boosts an ally's damage during mission."
+                android:textColor="#CCCCCC"
+                android:layout_marginBottom="16dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btn_ref_back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Back to Statistics"
+        android:backgroundTint="#00FFCC"
+        android:textColor="#000000"
+        android:layout_marginTop="8dp" />
+
+</LinearLayout>

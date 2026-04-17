@@ -1,0 +1,102 @@
+package com.example.oopproject.ui;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.oopproject.core.GameManager;
+import com.example.oopproject.playerJob.CrewLocation;
+import com.example.oopproject.R;
+
+public class HomeActivity extends AppCompatActivity {
+
+    private TextView textQuarters, textSimulator, textMission, textDay, textEnergy;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home);
+
+        // Load existing game data
+        GameManager.loadGame(this);
+
+        textQuarters = findViewById(R.id.text_quarters_count);
+        textSimulator = findViewById(R.id.text_simulator_count);
+        textMission = findViewById(R.id.text_mission_count);
+        textDay = findViewById(R.id.text_day);
+        textEnergy = findViewById(R.id.text_energy);
+
+        findViewById(R.id.btn_recruit).setOnClickListener(v -> {
+            if (GameManager.getInstance().energy >= GameManager.COST_RECRUIT) {
+                startActivity(new Intent(this, RecruitActivity.class));
+            } else {
+                android.widget.Toast.makeText(this, "Not enough energy!", android.widget.Toast.LENGTH_SHORT).show();
+            }
+        });
+        
+        findViewById(R.id.btn_quarters).setOnClickListener(v -> startActivity(new Intent(this, QuartersActivity.class)));
+        findViewById(R.id.btn_simulator).setOnClickListener(v -> startActivity(new Intent(this, SimulatorActivity.class)));
+        findViewById(R.id.btn_mission_control).setOnClickListener(v -> startActivity(new Intent(this, MissionControlActivity.class)));
+        
+        findViewById(R.id.btn_next_day).setOnClickListener(v -> {
+            GameManager.getInstance().nextDay();
+            updateCounts();
+            checkBossWarning();
+        });
+
+        findViewById(R.id.btn_stats).setOnClickListener(v -> {
+            startActivity(new Intent(this, StatisticsActivity.class));
+        });
+
+        findViewById(R.id.btn_restart).setOnClickListener(v -> {
+            GameManager.resetGame(this);
+            finish();
+            startActivity(new Intent(this, HomeActivity.class));
+            android.widget.Toast.makeText(this, "Game Restarted", android.widget.Toast.LENGTH_SHORT).show();
+        });
+        
+        checkBossWarning();
+    }
+
+    private void checkBossWarning() {
+        GameManager gm = GameManager.getInstance();
+        if (gm.currentDay == 19 || gm.currentDay == 29 || gm.currentDay == 39) {
+            android.widget.Toast.makeText(this, "WARNING: BOSS ENCOUNTER TOMORROW!", android.widget.Toast.LENGTH_LONG).show();
+        } else if (gm.isBossDay()) {
+            android.widget.Toast.makeText(this, "BOSS IS HERE! Prepare your 5 best crew!", android.widget.Toast.LENGTH_LONG).show();
+        } else if (gm.isGameOver()) {
+            android.widget.Toast.makeText(this, "CONGRATULATIONS! You survived 40 days!", android.widget.Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateCounts();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Auto-save when leaving the home screen
+        GameManager.getInstance().saveGame(this);
+    }
+
+    private void updateCounts() {
+        GameManager gm = GameManager.getInstance();
+        textQuarters.setText("Crew in Quarters: " + gm.getCrewAt(CrewLocation.QUARTERS).size());
+        textSimulator.setText("Crew in Simulator: " + gm.getCrewAt(CrewLocation.SIMULATOR).size());
+        textMission.setText("Crew in Mission Control: " + gm.getCrewAt(CrewLocation.MISSION_CONTROL).size());
+        textDay.setText("Day: " + gm.currentDay);
+        textEnergy.setText("Energy: " + gm.energy + "/" + GameManager.MAX_ENERGY);
+
+        boolean isBoss = gm.isBossDay();
+        findViewById(R.id.btn_recruit).setEnabled(!isBoss);
+        findViewById(R.id.btn_quarters).setEnabled(!isBoss);
+        findViewById(R.id.btn_simulator).setEnabled(!isBoss);
+        findViewById(R.id.btn_next_day).setEnabled(!isBoss);
+        findViewById(R.id.btn_stats).setEnabled(!isBoss);
+    }
+}

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#0F111A">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Colony Overview"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="#00FFCC"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="24dp" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:cardBackgroundColor="@color/design_default_color_secondary_variant"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/text_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Day: 1"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginEnd="24dp"/>
+            <TextView
+                android:id="@+id/text_energy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Energy: 25/25"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+            <TextView android:id="@+id/text_quarters_count" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Crew in Quarters: 0" />
+            <TextView android:id="@+id/text_simulator_count" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Crew in Simulator: 0" />
+            <TextView android:id="@+id/text_mission_count" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Crew in Mission Control: 0" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/btn_recruit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Recruit New Crew"
+        android:layout_marginBottom="8dp" />
+
+    <Button
+        android:id="@+id/btn_quarters"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Go to Quarters"
+        android:layout_marginBottom="8dp" />
+
+    <Button
+        android:id="@+id/btn_simulator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Go to Simulator"
+        android:layout_marginBottom="8dp" />
+
+    <Button
+        android:id="@+id/btn_mission_control"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Go to Mission Control"
+        android:layout_marginBottom="8dp" />
+
+    <Button
+        android:id="@+id/btn_stats"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View Statistics"
+        android:layout_marginBottom="8dp" />
+
+    <Button
+        android:id="@+id/btn_next_day"
+        style="?attr/materialButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="#FF9800"
+        android:text="Finish Day" />
+
+    <Button
+        android:id="@+id/btn_restart"
+        style="?attr/materialButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#F44336"
+        android:text="Restart Game" />
+
+</LinearLayout>

@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0A0A0F"
+    android:padding="16dp">
+
+    <!-- Background Image Placeholder -->
+    <ImageView
+        android:id="@+id/img_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:alpha="0.3"
+        android:src="@drawable/ic_launcher_background" />
+
+    <TextView
+        android:id="@+id/text_threat_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Threat: Asteroid Storm"
+        android:textColor="#FF5555"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/img_threat"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_launcher_foreground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_threat_name" />
+
+    <ProgressBar
+        android:id="@+id/progress_threat_hp"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:progressTint="#FF0000"
+        app:layout_constraintTop_toBottomOf="@id/img_threat" />
+
+    <TextView
+        android:id="@+id/text_threat_hp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="HP: 25/25"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/progress_threat_hp" />
+
+    <TextView
+        android:id="@+id/text_threat_stats"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ATK: 5 | RES: 2"
+        android:textColor="#AAAAAA"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_threat_hp" />
+
+    <!-- Crew Members Visualization -->
+    <LinearLayout
+        android:id="@+id/layout_crew_visual"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/text_threat_hp">
+
+        <LinearLayout
+            android:id="@+id/container_crew1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+            <ImageView
+                android:id="@+id/img_crew1"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/ic_launcher_foreground" />
+            <TextView
+                android:id="@+id/text_crew1_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:text="Crew A" />
+            <ProgressBar
+                android:id="@+id/progress_crew1_hp"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:progressTint="#00FF00" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="20dp"
+            android:layout_height="1dp" />
+
+        <LinearLayout
+            android:id="@+id/container_crew2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+            <ImageView
+                android:id="@+id/img_crew2"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/ic_launcher_foreground" />
+            <TextView
+                android:id="@+id/text_crew2_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:text="Crew B" />
+            <ProgressBar
+                android:id="@+id/progress_crew2_hp"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:progressTint="#00FF00" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="20dp"
+            android:layout_height="1dp" />
+
+        <LinearLayout
+            android:id="@+id/container_crew3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+            <ImageView
+                android:id="@+id/img_crew3"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/ic_launcher_foreground" />
+            <TextView
+                android:id="@+id/text_crew3_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:text="Crew C" />
+            <ProgressBar
+                android:id="@+id/progress_crew3_hp"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:progressTint="#00FF00" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="1dp" />
+
+        <LinearLayout
+            android:id="@+id/container_crew4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+            <ImageView
+                android:id="@+id/img_crew4"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/ic_launcher_foreground" />
+            <TextView
+                android:id="@+id/text_crew4_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:text="Crew D" />
+            <ProgressBar
+                android:id="@+id/progress_crew4_hp"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:progressTint="#00FF00" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="1dp" />
+
+        <LinearLayout
+            android:id="@+id/container_crew5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+            <ImageView
+                android:id="@+id/img_crew5"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/ic_launcher_foreground" />
+            <TextView
+                android:id="@+id/text_crew5_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:text="Crew E" />
+            <ProgressBar
+                android:id="@+id/progress_crew5_hp"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:progressTint="#00FF00" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/scroll_log"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:background="#DD000000"
+        android:padding="8dp"
+        app:layout_constraintBottom_toTopOf="@id/layout_actions"
+        app:layout_constraintTop_toBottomOf="@id/layout_crew_visual">
+        <TextView
+            android:id="@+id/text_mission_log"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="monospace"
+            android:text="Mission Started..."
+            android:textColor="#00FF00" />
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/layout_actions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/text_active_member"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Active Member's Turn"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/text_skill_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Skill: [Name] - [Description]"
+            android:textColor="#33BBFF"
+            android:textSize="12sp"
+            android:layout_marginBottom="4dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btn_attack"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Attack"
+                android:layout_marginEnd="4dp" />
+            <Button
+                android:id="@+id/btn_defend"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Defend"
+                android:layout_marginEnd="4dp" />
+            <Button
+                android:id="@+id/btn_skill"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Skill" />
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
