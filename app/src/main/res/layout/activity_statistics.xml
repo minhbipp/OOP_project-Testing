@@ -82,7 +82,7 @@
         app:cardBackgroundColor="#1A1D29"
         app:cardCornerRadius="8dp">
 
-        <com.example.oopproject.SimplePieChartView
+        <com.example.oopproject.ui.view.SimplePieChartView
             android:id="@+id/simple_pie_chart"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

@@ -102,9 +102,6 @@ public abstract class CrewMember implements Serializable {
         hp += Math.max(0, maxHp - oldMaxHp);
     }
 
-    public void attack(Threat threat) {
-        threat.takeDamage(this.damage, this);
-    }
 
     public boolean isAlive() {
         return hp > 0;
