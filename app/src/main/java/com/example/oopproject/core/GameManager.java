@@ -16,27 +16,111 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import android.content.Context;
 
+import com.example.oopproject.storage.ConsumableItem;
+
 public class GameManager implements Serializable {
     private static GameManager instance;
     private Map<Integer, CrewMember> crewMap = new HashMap<>();
     private int nextId = 1;
     
+    private List<ConsumableItem> inventory = new ArrayList<>();
+    private static final Map<ConsumableItem.ItemType, Integer> ITEM_LIMITS = new HashMap<>();
+    static {
+        ITEM_LIMITS.put(ConsumableItem.ItemType.ATK_POTION, 5);
+        ITEM_LIMITS.put(ConsumableItem.ItemType.HP_POTION, 5);
+        ITEM_LIMITS.put(ConsumableItem.ItemType.DEF_POTION, 5);
+    }
+    
     private static final String FILE_NAME = "game_save.dat";
+
+    public List<ConsumableItem> getInventory() {
+        return inventory;
+    }
+
+    public boolean addItem(ConsumableItem item) {
+        int count = 0;
+        for (ConsumableItem i : inventory) {
+            if (i.getType() == item.getType()) {
+                count++;
+            }
+        }
+        
+        Integer limit = ITEM_LIMITS.get(item.getType());
+        if (limit != null && count >= limit) {
+            return false; // Limit reached
+        }
+        
+        inventory.add(item);
+        return true;
+    }
+
+    public void removeItem(ConsumableItem item) {
+        inventory.remove(item);
+    }
+
+    public ConsumableItem rollForItemDrop() {
+        double roll = Math.random() * 100;
+        if (roll < 15) return new ConsumableItem(ConsumableItem.ItemType.ATK_POTION);
+        if (roll < 30) return new ConsumableItem(ConsumableItem.ItemType.HP_POTION);
+        if (roll < 45) return new ConsumableItem(ConsumableItem.ItemType.DEF_POTION);
+        return null;
+    }
 
     // Statistics
     public int totalMissions = 0;
     public int totalWins = 0;
     public int totalRecruited = 0;
 
+    public enum Difficulty {
+        EASY(1.0), MEDIUM(1.15), HARD(1.3), INSANE(1.50);
+        private final double multiplier;
+        Difficulty(double multiplier) { this.multiplier = multiplier; }
+        public double getMultiplier() { return multiplier; }
+    }
+    private Difficulty difficulty = Difficulty.EASY;
+
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
     // Day & Energy System
     public int currentDay = 1;
     public int energy = 25;
     public static final int MAX_ENERGY = 25;
+
+    public int credits = 10;
+    public static final int MAX_STORAGE = 6;
     
-    public static final int COST_RECRUIT = 5;
+    public static final int COST_PILOT = 1;
+    public static final int COST_MEDIC = 2;
+    public static final int COST_SOLDIER = 2;
+    public static final int COST_SCIENTIST = 3;
+    public static final int COST_ENGINEER = 3;
+
     public static final int COST_COMBAT = 5;
     public static final int COST_HEAL = 2;
     public static final int COST_TRAIN = 4;
+    public static final int COST_RECRUIT = 5;
+
+    public boolean useCredits(int amount) {
+        if (credits >= amount) {
+            credits -= amount;
+            return true;
+        }
+        return false;
+    }
+
+    public void addCredits(int amount) {
+        this.credits += amount;
+    }
+
+    public boolean canAddCrew() {
+        return crewMap.size() < MAX_STORAGE;
+    }
 
     public boolean useEnergy(int amount) {
         if (energy >= amount) {
@@ -73,11 +157,11 @@ public class GameManager implements Serializable {
     }
 
     public boolean isBossDay() {
-        return currentDay == 10 || currentDay == 20 || currentDay == 30 || currentDay == 40;
+        return currentDay == 10 || currentDay == 20 || currentDay == 30;
     }
 
     public boolean isGameOver() {
-        return currentDay > 40;
+        return currentDay > 30;
     }
 
     private GameManager() {}

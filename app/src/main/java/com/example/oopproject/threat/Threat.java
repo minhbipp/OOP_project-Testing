@@ -8,25 +8,18 @@ public abstract class Threat {
     private int maxHealth;
     protected int damage;
     protected int resilience;
-    protected String type = "combat";
 
     public Threat(String name, int maxHealth, int damage, int resilience) {
+        double multiplier = com.example.oopproject.core.GameManager.getInstance().getDifficulty().getMultiplier();
         this.name = name;
-        this.maxHealth = maxHealth;
-        this.health = maxHealth;
-        this.damage = damage;
-        this.resilience = resilience;
+        // Nerfed for balance: -50% HP, -60% Damage (40% remaining)
+        this.maxHealth = (int) (maxHealth * multiplier * 0.5);
+        this.health = this.maxHealth;
+        this.damage = (int) (damage * multiplier * 0.4);
+        this.resilience = (int) (resilience * multiplier);
     }
 
     public abstract void retaliate(CrewMember target);
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 
     public int getResilience() {
         return resilience;
@@ -50,22 +43,6 @@ public abstract class Threat {
 
     public int getAttackPower() {
         return damage;
-    }
-
-    public int getDamage() {
-        return damage;
-    }
-
-    public void setHealth(int health) {
-        this.health = health;
-    }
-
-    public void setMaxHealth(int maxHealth) {
-        this.maxHealth = maxHealth;
-    }
-
-    public void setDamage(int damage) {
-        this.damage = damage;
     }
 
     public abstract void takeDamage(int incomingDamage, CrewMember attacker);

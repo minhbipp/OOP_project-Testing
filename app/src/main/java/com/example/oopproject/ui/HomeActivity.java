@@ -12,7 +12,7 @@ import com.example.oopproject.R;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private TextView textQuarters, textSimulator, textMission, textDay, textEnergy;
+    private TextView textQuarters, textSimulator, textMission, textDay, textEnergy, textCredits;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,13 +27,10 @@ public class HomeActivity extends AppCompatActivity {
         textMission = findViewById(R.id.text_mission_count);
         textDay = findViewById(R.id.text_day);
         textEnergy = findViewById(R.id.text_energy);
+        textCredits = findViewById(R.id.text_credits);
 
         findViewById(R.id.btn_recruit).setOnClickListener(v -> {
-            if (GameManager.getInstance().energy >= GameManager.COST_RECRUIT) {
-                startActivity(new Intent(this, RecruitActivity.class));
-            } else {
-                android.widget.Toast.makeText(this, "Not enough energy!", android.widget.Toast.LENGTH_SHORT).show();
-            }
+            startActivity(new Intent(this, RecruitActivity.class));
         });
         
         findViewById(R.id.btn_quarters).setOnClickListener(v -> startActivity(new Intent(this, QuartersActivity.class)));
@@ -50,10 +47,16 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(new Intent(this, StatisticsActivity.class));
         });
 
+        findViewById(R.id.btn_shop).setOnClickListener(v -> {
+            startActivity(new Intent(this, ShopActivity.class));
+        });
+
         findViewById(R.id.btn_restart).setOnClickListener(v -> {
             GameManager.resetGame(this);
+            Intent intent = new Intent(this, DifficultySelectionActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
             finish();
-            startActivity(new Intent(this, HomeActivity.class));
             android.widget.Toast.makeText(this, "Game Restarted", android.widget.Toast.LENGTH_SHORT).show();
         });
         
@@ -91,6 +94,7 @@ public class HomeActivity extends AppCompatActivity {
         textMission.setText("Crew in Mission Control: " + gm.getCrewAt(CrewLocation.MISSION_CONTROL).size());
         textDay.setText("Day: " + gm.currentDay);
         textEnergy.setText("Energy: " + gm.energy + "/" + GameManager.MAX_ENERGY);
+        textCredits.setText("CR: " + gm.credits);
 
         boolean isBoss = gm.isBossDay();
         findViewById(R.id.btn_recruit).setEnabled(!isBoss);

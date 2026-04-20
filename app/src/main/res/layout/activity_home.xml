@@ -44,6 +44,15 @@
                 android:text="Energy: 25/25"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginEnd="24dp"/>
+            <TextView
+                android:id="@+id/text_credits"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CR: 5"
+                android:textColor="#FFFF00"
+                android:textSize="20sp"
                 android:textStyle="bold"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -96,6 +105,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="View Statistics"
+        android:layout_marginBottom="8dp" />
+
+    <Button
+        android:id="@+id/btn_shop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Go to Shop"
+        android:backgroundTint="#2E7D32"
         android:layout_marginBottom="8dp" />
 
     <Button

@@ -12,13 +12,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OOPProject">
         <activity
-            android:name=".ui.HomeActivity"
+            android:name=".ui.DifficultySelectionActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.HomeActivity"
+            android:exported="false" />
         <activity android:name=".ui.RecruitActivity" />
         <activity android:name=".ui.QuartersActivity" />
         <activity android:name=".ui.SimulatorActivity" />
@@ -26,6 +29,7 @@
         <activity android:name=".ui.MissionBattleActivity" />
         <activity android:name=".ui.StatisticsActivity" />
         <activity android:name=".ui.CrewReferenceActivity" />
+        <activity android:name=".ui.ShopActivity" />
         <activity
             android:name=".ui.MainActivity"
             android:exported="false" />

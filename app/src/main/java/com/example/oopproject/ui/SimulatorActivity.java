@@ -46,20 +46,14 @@ public class SimulatorActivity extends AppCompatActivity {
         }
 
         GameManager gm = GameManager.getInstance();
-        int totalCost = 0;
-        for (CrewMember m : members) {
-            // Recommendation: Cost increases with level
-            totalCost += GameManager.COST_TRAIN + (m.getLevel() * 2);
-        }
+        int totalCost = members.size() * GameManager.COST_TRAIN;
 
         if (gm.useEnergy(totalCost)) {
             for (CrewMember m : members) {
                 m.gainExp(2); 
                 m.trainingSessions++;
                 
-                // Recommendation: Reduced healing in Simulator (Lv0=1, Lv10=4)
-                int healAmount = 1 + (m.getLevel() / 3);
-                m.heal(healAmount);
+                m.heal(1);
             }
             Toast.makeText(this, "Trained " + members.size() + " crew for " + totalCost + " energy!", Toast.LENGTH_SHORT).show();
             listFragment.refreshList();

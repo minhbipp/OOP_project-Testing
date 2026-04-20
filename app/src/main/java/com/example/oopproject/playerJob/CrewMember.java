@@ -18,12 +18,14 @@ public abstract class CrewMember implements Serializable {
     protected int maxSp = 10;
     protected CrewLocation location = CrewLocation.QUARTERS;
 
-    // Statistics
-    public int missionsCount = 0;
-    public int victoriesCount = 0;
-    public int trainingSessions = 0;
     public int skillCooldown = 0;
     public boolean hasUsedDeathsDoor = false;
+    public int trainingSessions = 0;
+
+    // Temporary Combat Buffs (Reset after every battle)
+    public int tempAtkBonus = 0;
+    public int tempHpBonus = 0;
+    public int tempResilienceBonus = 0;
 
     public boolean isDefending = false;
 
@@ -43,7 +45,7 @@ public abstract class CrewMember implements Serializable {
             incomingDamage /= 2;
             isDefending = false;
         }
-        int actualDamage = Math.max(0, incomingDamage - resilience);
+        int actualDamage = Math.max(0, incomingDamage - (resilience + tempResilienceBonus));
         
         if (this.hp - actualDamage <= 0 && !hasUsedDeathsDoor) {
             this.hp = 1;
@@ -77,6 +79,12 @@ public abstract class CrewMember implements Serializable {
         this.sp = 5; // Reset SP to initial
     }
 
+    public void resetCombatBuffs() {
+        tempAtkBonus = 0;
+        tempHpBonus = 0;
+        tempResilienceBonus = 0;
+    }
+
     public CrewLocation getLocation() {
         return location;
     }
@@ -92,12 +100,12 @@ public abstract class CrewMember implements Serializable {
     }
 
     public void gainExp(int amount) {
-        int[] xpRequired = {3, 5, 10, 0}; // Lv0->1: 3, Lv1->2: 5, Lv2->3: 10
+        int[] xpRequired = {6, 10, 16, 0}; // Lv0->1: 6, Lv1->2: 10, Lv2->3: 16
         this.exp += amount;
 
-        while (level < 3 && exp >= xpRequired[level]) {
-            exp -= xpRequired[level];
+        if (level < 3 && exp >= xpRequired[level]) {
             level++;
+            exp = 0; // Reset XP to 0 after leveling up
             updateStatsForLevel();
         }
 
@@ -111,6 +119,16 @@ public abstract class CrewMember implements Serializable {
         maxHp = maxHpProgression[level];
         damage = damageProgression[level];
         hp += Math.max(0, maxHp - oldMaxHp);
+    }
+
+    public void loseLevel() {
+        if (level > 0) {
+            level--;
+            exp = 0; // Reset XP on level down
+            maxHp = maxHpProgression[level];
+            damage = damageProgression[level];
+            hp = Math.min(hp, maxHp);
+        }
     }
 
 
@@ -133,11 +151,8 @@ public abstract class CrewMember implements Serializable {
     public int getSp() { return sp; }
     public int getMaxSp() { return maxSp; }
 
-    public int getAttackPower() { return damage; }
+    public int getAttackPower() { return damage + tempAtkBonus; }
 
-    public void setExp(int exp) { this.exp = exp; }
-    public void setLevel(int level) { this.level = level; }
-    public void setEnergy(int energy) { this.energy = energy; }
     public void setHp(int hp) { this.hp = Math.max(0, Math.min(hp, maxHp)); }
     public void setMaxHp(int maxHp) { this.maxHp = maxHp; }
     public void setDamage(int damage) { this.damage = damage; }

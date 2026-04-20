@@ -37,7 +37,7 @@ public class MissionBattleActivity extends AppCompatActivity {
     private TextView textThreatName, textThreatHp, textLog, textActiveMember, textThreatStats, textSkillInfo;
     private ProgressBar progressThreatHp;
     private View layoutActions;
-    private Button btnAttack, btnDefend, btnSkill;
+    private Button btnAttack, btnSkill, btnItems;
 
     private ImageView imgThreat, imgCrew1, imgCrew2, imgCrew3, imgCrew4, imgCrew5, imgBackground;
     private ProgressBar progressCrew1, progressCrew2, progressCrew3, progressCrew4, progressCrew5;
@@ -48,6 +48,7 @@ public class MissionBattleActivity extends AppCompatActivity {
     private List<CrewMember> squad = new ArrayList<>();
     private Threat threat;
     private int currentMemberIndex = 0;
+    private boolean isCrewPhase = true;
     private StringBuilder logBuilder = new StringBuilder();
     private Random random = new Random();
 
@@ -59,7 +60,6 @@ public class MissionBattleActivity extends AppCompatActivity {
         initViews();
         loadSquad();
         initThreat();
-        initMusic();
         
         startMission();
     }
@@ -74,8 +74,9 @@ public class MissionBattleActivity extends AppCompatActivity {
         progressThreatHp = findViewById(R.id.progress_threat_hp);
         layoutActions = findViewById(R.id.layout_actions);
         btnAttack = findViewById(R.id.btn_attack);
-        btnDefend = findViewById(R.id.btn_defend);
         btnSkill = findViewById(R.id.btn_skill);
+        btnItems = findViewById(R.id.btn_items);
+        if (btnItems != null) btnItems.setOnClickListener(v -> handleItems());
 
         imgThreat = findViewById(R.id.img_threat);
         imgCrew1 = findViewById(R.id.img_crew1);
@@ -102,12 +103,7 @@ public class MissionBattleActivity extends AppCompatActivity {
         containerCrew5 = findViewById(R.id.container_crew5);
 
         btnAttack.setOnClickListener(v -> handleAttack());
-        btnDefend.setOnClickListener(v -> handleDefend());
         btnSkill.setOnClickListener(v -> handleSkill());
-    }
-
-    private void initMusic() {
-        // Music initialization logic...
     }
 
     private void loadSquad() {
@@ -169,50 +165,31 @@ public class MissionBattleActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer.release();
-        }
-    }
-
     private void initThreat() {
         GameManager gm = GameManager.getInstance();
         
-        int dayBonusHp = (gm.currentDay / 5) * 3;
-        int dayBonusAtk = (int) ((gm.currentDay / 5) * 0.6);
-        
-        int hp = 20 + (gm.totalMissions * 3) + dayBonusHp;
-        int atk = 4 + (int) (gm.totalMissions * 0.3) + dayBonusAtk;
-        int res = 1 + (gm.totalMissions / 7);
+        int dayBonusHp = (gm.currentDay / 4) * 2;
+        int hp = 30 + (gm.totalMissions * 2) + dayBonusHp;
+
+        int atk;
+        if (gm.currentDay < 10) {
+            atk = 6 + random.nextInt(10); // 6 to 15 (nextInt(10) gives 0-9)
+        } else {
+            atk = 10 + random.nextInt(9); // 10 to 18 (nextInt(9) gives 0-8)
+        }
+
+        int res = 1 + (gm.totalMissions / 10);
         
         String name = "Asteroid Storm";
         if (gm.currentDay == 10) {
-            hp = (int) (hp * 1.3);
-            atk = (int) (atk * 1.3);
-            res = (int) (res * 1.2);
-            name = "NEBULA STALKER (BOSS)";
-            threat = new VoidReaperBoss(name, hp, atk, res);
-        } else if (gm.currentDay == 20) {
-            hp = (int) (hp * 1.6);
-            atk = (int) (atk * 1.6);
-            res = (int) (res * 1.3);
             name = "VOID REAPER (BOSS)";
-            threat = new VoidReaperBoss(name, hp, atk, res);
-        } else if (gm.currentDay == 30) {
-            hp = (int) (hp * 1.9);
-            atk = (int) (atk * 1.9);
-            res = (int) (res * 1.6);
+            threat = new VoidReaperBoss(name, hp + 20, atk + 2, res);
+        } else if (gm.currentDay == 20) {
             name = "STAR DEVOURER (BOSS)";
-            threat = new StarDevourerBoss(name, hp, atk, res);
-        } else if (gm.currentDay == 40) {
-            hp = (int) (hp * 2.2);
-            atk = (int) (atk * 2.2);
-            res = (int) (res * 1.9);
+            threat = new StarDevourerBoss(name, hp + 30, atk + 3, res);
+        } else if (gm.currentDay == 30) {
             name = "THE OMEGA ENTITY (FINAL BOSS)";
-            threat = new OmegaEntityBoss(name, hp, atk, res);
+            threat = new OmegaEntityBoss(name, hp + 40, atk + 5, res);
         } else {
             threat = new StealthFighter(name, hp, atk, res);
         }
@@ -226,12 +203,6 @@ public class MissionBattleActivity extends AppCompatActivity {
         textThreatStats.setText("ATK: " + threat.getAttackPower() + " | RES: " + threat.getResilience());
         progressThreatHp.setMax(threat.getMaxHealth());
         progressThreatHp.setProgress(threat.getHealth());
-        
-        if (GameManager.getInstance().isBossDay()) {
-            imgThreat.setImageResource(R.drawable.threat_boss);
-        } else {
-            imgThreat.setImageResource(android.R.drawable.ic_delete); // Default threat icon
-        }
     }
 
     private void addLog(String message) {
@@ -247,13 +218,22 @@ public class MissionBattleActivity extends AppCompatActivity {
         }
         for (CrewMember m : squad) {
             m.skillCooldown = 0;
-            m.hasUsedDeathsDoor = false; // Reset Death's Door for the mission
-            if (m instanceof Soldier) {
-                ((Soldier) m).resetEnrage();
-            }
+            m.hasUsedDeathsDoor = false;
+            m.heal(m.getMaxHp()); // Ensure full HP at start of mission
+            if (m instanceof Soldier) ((Soldier) m).resetEnrage();
         }
         addLog("Mission Started against " + threat.getName());
-        nextTurn();
+        
+        if (random.nextBoolean()) {
+            addLog("Coin Flip: HEADS! Crew moves first.");
+            isCrewPhase = true;
+            currentMemberIndex = 0;
+            nextTurn();
+        } else {
+            addLog("Coin Flip: TAILS! Threat moves first.");
+            isCrewPhase = false;
+            triggerThreatTurn();
+        }
     }
 
     private void nextTurn() {
@@ -261,140 +241,169 @@ public class MissionBattleActivity extends AppCompatActivity {
             endMission(true);
             return;
         }
-
         if (allCrewDead()) {
             endMission(false);
             return;
         }
-
-        CrewMember active = squad.get(currentMemberIndex);
-        if (!active.isAlive()) {
-            currentMemberIndex = (currentMemberIndex + 1) % squad.size();
-            nextTurn();
+        if (!isCrewPhase) {
+            triggerThreatTurn();
             return;
         }
 
+        while (currentMemberIndex < squad.size() && !squad.get(currentMemberIndex).isAlive()) {
+            currentMemberIndex++;
+        }
+
+        if (currentMemberIndex >= squad.size()) {
+            isCrewPhase = false;
+            addLog("--- Threat Turn ---");
+            new Handler().postDelayed(this::triggerThreatTurn, 1000);
+            return;
+        }
+
+        CrewMember active = squad.get(currentMemberIndex);
         layoutActions.setVisibility(View.VISIBLE);
-        textActiveMember.setText(active.getId() + "'s Turn (HP: " + active.getHp() + ")");
-
-        if (active.skillCooldown > 0) {
-            active.skillCooldown--;
-        }
-
-        String skillText = "Skill: " + active.getSpecialSkillName() + " - " + active.getSpecialSkillDescription();
-        if (active.skillCooldown > 0) {
-            btnSkill.setEnabled(false);
-            skillText += " (Cooldown: " + active.skillCooldown + ")";
-        } else {
-            btnSkill.setEnabled(true);
-        }
-        textSkillInfo.setText(skillText);
+        textActiveMember.setText(active.getId() + "'s Turn (HP: " + active.getHp() + " | SP: " + active.getSp() + ")");
+        
+        if (active.skillCooldown > 0) active.skillCooldown--;
+        
+        btnSkill.setEnabled(active.skillCooldown == 0 && (active.getSp() >= 1 || (active instanceof Soldier && ((Soldier)active).canEnrage())));
+        textSkillInfo.setText("Skill: " + active.getSpecialSkillName() + (active.skillCooldown > 0 ? " (CD: " + active.skillCooldown + ")" : ""));
     }
 
     private void handleAttack() {
         layoutActions.setVisibility(View.GONE);
         CrewMember active = squad.get(currentMemberIndex);
-        
-        if (active instanceof Soldier) {
-            ((Soldier) active).enrage();
-        }
-
-        double randomness = Math.random() * 3;
-        int specBonus = 0;
-        if (threat.getType().equals("repair") && active instanceof Engineer) specBonus = 2;
-        if (threat.getType().equals("scientific") && active instanceof Scientist) specBonus = 2;
-
-        int damage = (int)((active.getAttackPower() + active.getExp() + randomness + specBonus) - threat.getResilience());
-        damage = Math.max(0, damage);
-        
+        active.gainSp(1);
+        // Damage is already calculated minus resilience in takeNormalDamage, but handleAttack was doing it twice.
+        // Let's pass the raw damage and let the threat handle its own resilience.
+        int damage = active.getAttackPower();
         threat.takeNormalDamage(damage);
-        addLog(active.getId() + " attacks! Damage: " + damage);
-
-        if (active instanceof Pilot) {
-            ((Pilot) active).extraAttack(threat);
-            addLog(active.getId() + " triggers Extra Attack!");
-        }
         
+        // Calculate what was actually dealt for the log
+        int actualDealt = Math.max(0, damage - threat.getResilience());
+        addLog(active.getId() + " attacks! Damage: " + actualDealt + " (+1 SP)");
+
         updateThreatUI();
-        
-        if (threat.isDefeated()) {
-            new Handler().postDelayed(() -> endMission(true), 1000);
-        } else {
-            new Handler().postDelayed(() -> threatRetaliate(active), 800);
-        }
-    }
-
-    private void handleDefend() {
-        layoutActions.setVisibility(View.GONE);
-        CrewMember active = squad.get(currentMemberIndex);
-        active.isDefending = true;
-        
-        // Final Polish: Defending restores a small amount of HP
-        int tacticalHeal = 2 + (active.getLevel() / 2);
-        active.heal(tacticalHeal);
-        
-        addLog(active.getId() + " defends and recovers " + tacticalHeal + " HP.");
         updateAllCrewUI();
-
-        new Handler().postDelayed(() -> threatRetaliate(active), 800);
+        finishCrewMemberTurn();
     }
 
     private void handleSkill() {
         layoutActions.setVisibility(View.GONE);
         CrewMember active = squad.get(currentMemberIndex);
-        
         if (active instanceof Medic) {
             CrewMember target = findMostWounded();
-            if (target != null) {
-                ((Medic) active).heal(target);
-                addLog(active.getId() + " heals " + target.getId());
-                updateAllCrewUI();
+            ((Medic) active).heal(target);
+            active.skillCooldown = 3; // Medic 3 turn CD
+            addLog(active.getId() + " uses HEAL on " + target.getId() + ".");
+        } else if (active instanceof Soldier) {
+            Soldier s = (Soldier) active;
+            if (s.canEnrage()) {
+                s.enrage(java.util.Collections.singletonList(threat));
+                active.skillCooldown = 5; // Soldier 5 turn CD
+                addLog(active.getId() + " uses ENRAGE.");
+            } else {
+                addLog(active.getId() + " failed to ENRAGE!");
             }
+        } else if (active instanceof Pilot) {
+            ((Pilot) active).extraAttack(threat);
+            active.skillCooldown = 2; // Pilot 2 turn CD
+            addLog(active.getId() + " uses EXTRA ATTACK.");
         } else if (active instanceof Scientist) {
-            CrewMember target = findMostWounded();
-            if (target != null) {
-                ((Scientist) active).boostAttack(target);
-                addLog(active.getId() + " boosts attack of " + target.getId());
+            if (active.getSp() >= 1) {
+                CrewMember target = findMostWounded();
+                target.tempAtkBonus += 2 + active.getLevel();
+                active.useSp(1);
+                active.skillCooldown = 2; // Scientist 2 turn CD
+                addLog(active.getId() + " boosts " + target.getId() + "'s Attack!");
             }
         } else if (active instanceof Engineer) {
-            CrewMember target = findMostWounded();
-            if (target != null) {
-                ((Engineer) active).boostDefense(target);
-                addLog(active.getId() + " boosts defense of " + target.getId());
-                updateAllCrewUI();
+            if (active.getSp() >= 1) {
+                CrewMember target = findMostWounded();
+                target.tempResilienceBonus += 1 + (active.getLevel() / 2);
+                active.useSp(1);
+                active.skillCooldown = 4; // Engineer 4 turn CD
+                addLog(active.getId() + " boosts " + target.getId() + "'s Resilience!");
             }
-        } else {
-            int damage = (int)(((active.getAttackPower() + active.getExp()) * 1.5) - threat.getResilience());
-            damage = Math.max(0, damage);
-            threat.takeNormalDamage(damage);
-            addLog(active.getId() + " uses Special Ability! Damage: " + damage);
         }
-        
-        active.skillCooldown = 2;
+        updateAllCrewUI();
         updateThreatUI();
-        
-        if (threat.isDefeated()) {
-            new Handler().postDelayed(() -> endMission(true), 1000);
-        } else {
-            new Handler().postDelayed(() -> threatRetaliate(active), 800);
+        finishCrewMemberTurn();
+    }
+
+    private void handleItems() {
+        List<com.example.oopproject.storage.ConsumableItem> inventory = GameManager.getInstance().getInventory();
+        if (inventory.isEmpty()) {
+            Toast.makeText(this, "No items!", Toast.LENGTH_SHORT).show();
+            return;
         }
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle("Items");
+        String[] names = new String[inventory.size()];
+        for (int i = 0; i < inventory.size(); i++) names[i] = inventory.get(i).getName();
+        builder.setItems(names, (d, w) -> {
+            useItem(inventory.get(w));
+        });
+        builder.show();
+    }
+
+    private void useItem(com.example.oopproject.storage.ConsumableItem item) {
+        CrewMember active = squad.get(currentMemberIndex);
+        switch (item.getType()) {
+            case ATK_POTION:
+                active.tempAtkBonus += 2;
+                addLog(active.getId() + " drinks Atk Potion! (+2 ATK for this battle)");
+                break;
+            case HP_POTION:
+                active.heal(5);
+                addLog(active.getId() + " drinks HP Potion! (+5 HP)");
+                break;
+            case DEF_POTION:
+                active.tempResilienceBonus += 2;
+                addLog(active.getId() + " drinks Def Potion! (+2 DEF for this battle)");
+                break;
+        }
+        GameManager.getInstance().removeItem(item);
+        updateAllCrewUI();
+        finishCrewMemberTurn();
+    }
+
+    private void finishCrewMemberTurn() {
+        currentMemberIndex++;
+        new Handler().postDelayed(this::nextTurn, 800);
+    }
+
+    private void triggerThreatTurn() {
+        if (threat.isDefeated()) {
+            endMission(true);
+            return;
+        }
+        List<CrewMember> alive = new ArrayList<>();
+        for (CrewMember m : squad) if (m.isAlive()) alive.add(m);
+        if (alive.isEmpty()) {
+            endMission(false);
+            return;
+        }
+        CrewMember target = alive.get(random.nextInt(alive.size()));
+        threat.retaliate(target);
+        addLog(threat.getName() + " attacks " + target.getId() + "!");
+        updateAllCrewUI();
+        isCrewPhase = true;
+        currentMemberIndex = 0;
+        new Handler().postDelayed(this::nextTurn, 1000);
     }
 
     private CrewMember findMostWounded() {
         CrewMember target = null;
-        int minHp = Integer.MAX_VALUE;
         for (CrewMember m : squad) {
-            if (m.isAlive() && m.getHp() < m.getMaxHp() && m.getHp() < minHp) {
-                minHp = m.getHp();
-                target = m;
+            if (m.isAlive()) {
+                if (target == null || m.getHp() < target.getHp()) {
+                    target = m;
+                }
             }
         }
-        if (target == null) {
-            for (CrewMember m : squad) {
-                if (m.isAlive()) return m;
-            }
-        }
-        return target;
+        return target != null ? target : squad.get(0);
     }
 
     private void updateAllCrewUI() {
@@ -405,42 +414,8 @@ public class MissionBattleActivity extends AppCompatActivity {
         if (squad.size() >= 5) updateCrewUI(squad.get(4), progressCrew5, imgCrew5);
     }
 
-    private void threatRetaliate(CrewMember active) {
-        if (threat.isDefeated()) return;
-        threat.retaliate(active);
-        addLog(threat.getName() + " retaliates!");
-        updateCrewUI(active, getProgressForMember(active), getImageForMember(active));
-
-        if (!active.isAlive()) {
-            addLog(active.getId() + " has fallen!");
-        }
-
-        currentMemberIndex = (currentMemberIndex + 1) % squad.size();
-        new Handler().postDelayed(this::nextTurn, 1000);
-    }
-
-    private ProgressBar getProgressForMember(CrewMember member) {
-        int index = squad.indexOf(member);
-        if (index == 0) return progressCrew1;
-        if (index == 1) return progressCrew2;
-        if (index == 2) return progressCrew3;
-        if (index == 3) return progressCrew4;
-        return progressCrew5;
-    }
-
-    private ImageView getImageForMember(CrewMember member) {
-        int index = squad.indexOf(member);
-        if (index == 0) return imgCrew1;
-        if (index == 1) return imgCrew2;
-        if (index == 2) return imgCrew3;
-        if (index == 3) return imgCrew4;
-        return imgCrew5;
-    }
-
     private boolean allCrewDead() {
-        for (CrewMember m : squad) {
-            if (m.isAlive()) return false;
-        }
+        for (CrewMember m : squad) if (m.isAlive()) return false;
         return true;
     }
 
@@ -448,58 +423,24 @@ public class MissionBattleActivity extends AppCompatActivity {
         layoutActions.setVisibility(View.GONE);
         GameManager gm = GameManager.getInstance();
         gm.totalMissions++;
-        
-        if (success) {
-            addLog("VICTORY! Threat neutralized.");
-            gm.totalWins++;
-            // Reward energy for victory
-            gm.energy = Math.min(GameManager.MAX_ENERGY, gm.energy + 2);
-            
-            for (CrewMember m : squad) {
-                if (m.isAlive()) {
-                    m.victoriesCount++;
-                    m.gainExp(6); // Increased XP from 3 to 6
-                }
-                m.missionsCount++;
-            }
 
-            if (gm.currentDay == 40) {
-                addLog("THE OMEGA ENTITY IS DESTROYED! THE COLONY IS SAVED!");
-                new Handler().postDelayed(() -> {
-                    Toast.makeText(this, "ULTIMATE VICTORY! You saved the colony!", Toast.LENGTH_LONG).show();
-                    finish();
-                }, 3000);
-                return;
-            }
-            
-            if (gm.isBossDay()) {
-                addLog("BOSS DEFEATED! Preparing for next day...");
-                gm.nextDay();
-            }
-
-        } else {
-            addLog("MISSION FAILED.");
-            if (gm.isBossDay()) {
-                addLog("THE COLONY HAS FALLEN...");
-                new Handler().postDelayed(() -> {
-                    Toast.makeText(this, "GAME OVER - The Boss destroyed the colony", Toast.LENGTH_LONG).show();
-                    GameManager.resetGame(this);
-                    Intent intent = new Intent(this, HomeActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                    finish();
-                }, 3000);
-                return;
-            }
-            for (CrewMember m : squad) {
-                m.missionsCount++;
-                if (!m.isAlive()) {
-                    m.setHp(1); // Revive at 1 health after combat
-                    m.enterMedbay();
-                }
-            }
+        // Clear temporary mission buffs and bonuses
+        for (CrewMember m : squad) {
+            m.resetCombatBuffs();
         }
-        
+
+        if (success) {
+            addLog("VICTORY!");
+            gm.totalWins++;
+            gm.addCredits(2);
+            addLog("Earned 2 Credits!");
+            com.example.oopproject.storage.ConsumableItem item = gm.rollForItemDrop();
+            if (item != null) gm.addItem(item);
+            for (CrewMember m : squad) if (m.isAlive()) m.gainExp(6);
+        } else {
+            addLog("FAILED.");
+            for (CrewMember m : squad) { m.loseLevel(); if (!m.isAlive()) { m.setHp(1); m.enterMedbay(); } }
+        }
         new Handler().postDelayed(this::finish, 2000);
     }
 }

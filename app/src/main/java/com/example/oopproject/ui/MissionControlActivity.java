@@ -32,22 +32,29 @@ public class MissionControlActivity extends AppCompatActivity {
 
         findViewById(R.id.btn_back).setOnClickListener(v -> finish());
         findViewById(R.id.btn_launch_mission).setOnClickListener(v -> launchMission());
-        findViewById(R.id.btn_back_to_quarters).setOnClickListener(v -> moveAll(CrewLocation.QUARTERS));
+        findViewById(R.id.btn_back_to_quarters).setOnClickListener(v -> {
+            if (GameManager.getInstance().isBossDay()) {
+                Toast.makeText(this, "Cannot move crew on Boss Day! You must fight!", Toast.LENGTH_SHORT).show();
+            } else {
+                moveAll(CrewLocation.QUARTERS);
+            }
+        });
     }
 
     private void launchMission() {
-        List<CrewMember> members = GameManager.getInstance().getCrewAt(CrewLocation.MISSION_CONTROL);
+        if (listFragment == null) return;
+        List<CrewMember> selectedMembers = listFragment.getSelectedMembers();
         
         GameManager gm = GameManager.getInstance();
         boolean isBoss = gm.isBossDay();
         int maxAllowed = isBoss ? 5 : 3;
 
-        if (members.isEmpty()) {
-            Toast.makeText(this, "Move crew to Mission Control first", Toast.LENGTH_SHORT).show();
+        if (selectedMembers.isEmpty()) {
+            Toast.makeText(this, "Select crew members for the mission", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (members.size() > maxAllowed) {
+        if (selectedMembers.size() > maxAllowed) {
             Toast.makeText(this, "Too many crew members! Max is " + maxAllowed, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -58,8 +65,8 @@ public class MissionControlActivity extends AppCompatActivity {
         }
 
         Intent intent = new Intent(this, MissionBattleActivity.class);
-        for (int i = 0; i < members.size(); i++) {
-            intent.putExtra("member" + (i + 1) + "_id", members.get(i).getId());
+        for (int i = 0; i < selectedMembers.size(); i++) {
+            intent.putExtra("member" + (i + 1) + "_id", selectedMembers.get(i).getId());
         }
         
         startActivity(intent);
