@@ -21,8 +21,4 @@ public class Scientist extends CrewMember {
         return "boostAttack";
     }
 
-    @Override
-    public String getSpecialSkillDescription() {
-        return "Increase " + boostProgression[level] + " Atk to 1 selected crew for 2 turns";
-    }
 }

@@ -14,9 +14,4 @@ public class VoidReaperBoss extends Threat {
         target.takeDamage(this.damage);
     }
 
-    @Override
-    public void takeDamage(int incomingDamage, CrewMember attacker) {
-        // Boss might have some damage reduction or mechanics
-        takeNormalDamage(incomingDamage);
-    }
 }

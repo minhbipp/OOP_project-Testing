@@ -1,4 +1,4 @@
-package com.example.oopproject.ui;
+package com.example.oopproject.Class_UI;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +10,7 @@ import com.example.oopproject.R;
 import com.example.oopproject.core.GameManager;
 import com.example.oopproject.playerJob.CrewLocation;
 import com.example.oopproject.playerJob.CrewMember;
-import com.example.oopproject.ui.fragment.CrewListFragment;
+import com.example.oopproject.Class_UI.fragment.CrewListFragment;
 
 import java.util.List;
 

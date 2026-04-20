@@ -14,9 +14,4 @@ public class StarDevourerBoss extends Threat {
         target.takeDamage(this.damage);
     }
 
-    @Override
-    public void takeDamage(int incomingDamage, CrewMember attacker) {
-        // Can add unique mechanics here
-        takeNormalDamage(incomingDamage);
-    }
 }

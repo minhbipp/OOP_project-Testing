@@ -45,7 +45,6 @@ public abstract class Threat {
         return damage;
     }
 
-    public abstract void takeDamage(int incomingDamage, CrewMember attacker);
 
     public void takeNormalDamage(int incomingDamage) {
         int actualDamage = Math.max(0, incomingDamage - resilience);

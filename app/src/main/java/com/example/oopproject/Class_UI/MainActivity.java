@@ -1,4 +1,4 @@
-package com.example.oopproject.ui;
+package com.example.oopproject.Class_UI;
 
 import android.os.Bundle;
 
@@ -12,19 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.oopproject.core.GameManager;
-import com.example.oopproject.playerJob.CrewMember;
 import com.example.oopproject.playerJob.Engineer;
 import com.example.oopproject.playerJob.Medic;
 import com.example.oopproject.playerJob.Soldier;
-import com.example.oopproject.ui.adapter.CrewAdapter;
+import com.example.oopproject.Class_UI.adapter.CrewAdapter;
 import com.example.oopproject.R;
 
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {

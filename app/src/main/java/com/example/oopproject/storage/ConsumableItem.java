@@ -33,5 +33,4 @@ public class ConsumableItem implements Serializable {
 
     public String getName() { return name; }
     public ItemType getType() { return type; }
-    public String getDescription() { return description; }
 }

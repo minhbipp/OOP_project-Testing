@@ -1,16 +1,14 @@
-package com.example.oopproject.ui;
+package com.example.oopproject.Class_UI;
 
 import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.oopproject.core.GameManager;
 import com.example.oopproject.playerJob.CrewLocation;
 import com.example.oopproject.playerJob.CrewMember;
-import com.example.oopproject.ui.fragment.CrewListFragment;
+import com.example.oopproject.Class_UI.fragment.CrewListFragment;
 import com.example.oopproject.R;
 
 import java.util.List;

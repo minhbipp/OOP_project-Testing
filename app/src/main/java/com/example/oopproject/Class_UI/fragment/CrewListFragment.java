@@ -1,11 +1,9 @@
-package com.example.oopproject.ui.fragment;
+package com.example.oopproject.Class_UI.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,7 +16,7 @@ import com.example.oopproject.R;
 import com.example.oopproject.core.GameManager;
 import com.example.oopproject.playerJob.CrewLocation;
 import com.example.oopproject.playerJob.CrewMember;
-import com.example.oopproject.ui.adapter.SelectableCrewAdapter;
+import com.example.oopproject.Class_UI.adapter.SelectableCrewAdapter;
 
 import java.util.List;
 
@@ -28,14 +26,6 @@ public class CrewListFragment extends Fragment {
     private RecyclerView recyclerView;
     private SelectableCrewAdapter adapter;
     private TextView textTitle;
-
-    public static CrewListFragment newInstance(CrewLocation location) {
-        CrewListFragment fragment = new CrewListFragment();
-        Bundle args = new Bundle();
-        args.putSerializable("location", location);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

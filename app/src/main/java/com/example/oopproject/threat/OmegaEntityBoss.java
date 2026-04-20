@@ -13,10 +13,4 @@ public class OmegaEntityBoss extends Threat {
         // Final Boss deals overwhelming damage
         target.takeDamage(this.damage);
     }
-
-    @Override
-    public void takeDamage(int incomingDamage, CrewMember attacker) {
-        // Final Boss damage logic
-        takeNormalDamage(incomingDamage);
-    }
 }

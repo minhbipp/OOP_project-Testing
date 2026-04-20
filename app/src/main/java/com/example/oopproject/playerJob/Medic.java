@@ -20,8 +20,4 @@ public class Medic extends CrewMember {
         return "heal";
     }
 
-    @Override
-    public String getSpecialSkillDescription() {
-        return "Recover " + healProgression[level] + " HP for 1 selected crew.";
-    }
 }

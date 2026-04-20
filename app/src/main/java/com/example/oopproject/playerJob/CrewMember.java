@@ -126,7 +126,6 @@ public abstract class CrewMember implements Serializable {
     }
 
     public abstract String getSpecialSkillName();
-    public abstract String getSpecialSkillDescription();
 
     // --- Getters & Setters ---
     public String getId() { return id; }
@@ -136,12 +135,9 @@ public abstract class CrewMember implements Serializable {
     public int getHp() { return hp; }
     public int getMaxHp() { return maxHp; }
     public int getDamage() { return damage; }
-    public int getResilience() { return resilience; }
 
     public int getAttackPower() { return damage + tempAtkBonus; }
 
     public void setHp(int hp) { this.hp = Math.max(0, Math.min(hp, maxHp)); }
-    public void setMaxHp(int maxHp) { this.maxHp = maxHp; }
     public void setDamage(int damage) { this.damage = damage; }
-    public void setResilience(int resilience) { this.resilience = resilience; }
 }

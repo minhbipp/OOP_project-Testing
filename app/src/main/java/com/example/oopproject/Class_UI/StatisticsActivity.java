@@ -1,4 +1,4 @@
-package com.example.oopproject.ui;
+package com.example.oopproject.Class_UI;
 
 import android.os.Bundle;
 import android.widget.TextView;
@@ -11,7 +11,7 @@ import com.example.oopproject.playerJob.Medic;
 import com.example.oopproject.playerJob.Pilot;
 import com.example.oopproject.playerJob.Scientist;
 import com.example.oopproject.playerJob.Soldier;
-import com.example.oopproject.ui.view.SimplePieChartView;
+import com.example.oopproject.Class_UI.view.SimplePieChartView;
 import com.example.oopproject.R;
 
 import java.util.ArrayList;

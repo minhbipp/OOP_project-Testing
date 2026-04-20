@@ -1,4 +1,4 @@
-package com.example.oopproject.ui.adapter;
+package com.example.oopproject.Class_UI.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;

@@ -23,8 +23,4 @@ public class Pilot extends CrewMember {
         return "extraAttack";
     }
 
-    @Override
-    public String getSpecialSkillDescription() {
-        return "performs an additional attack = " + (int)(extraAttackPercent[level] * 100) + "% Atk to a random threat.";
-    }
 }

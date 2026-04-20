@@ -1,8 +1,7 @@
-package com.example.oopproject.ui;
+package com.example.oopproject.Class_UI;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -29,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import android.media.MediaPlayer;
 import android.widget.ImageView;
 
 public class MissionBattleActivity extends AppCompatActivity {
@@ -43,7 +41,6 @@ public class MissionBattleActivity extends AppCompatActivity {
     private ProgressBar progressCrew1, progressCrew2, progressCrew3, progressCrew4, progressCrew5;
     private TextView textCrew1Name, textCrew2Name, textCrew3Name, textCrew4Name, textCrew5Name;
     private View containerCrew3, containerCrew4, containerCrew5;
-    private MediaPlayer mediaPlayer;
 
     private List<CrewMember> squad = new ArrayList<>();
     private Threat threat;

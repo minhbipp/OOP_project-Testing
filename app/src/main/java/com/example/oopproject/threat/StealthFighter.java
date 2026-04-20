@@ -19,8 +19,4 @@ public class StealthFighter extends Threat {
         target.takeDamage(finalDamage);
     }
 
-    @Override
-    public void takeDamage(int incomingDamage, CrewMember attacker) {
-        takeNormalDamage(incomingDamage);
-    }
 }

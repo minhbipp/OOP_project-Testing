@@ -1,4 +1,4 @@
-package com.example.oopproject.ui.view;
+package com.example.oopproject.Class_UI.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
