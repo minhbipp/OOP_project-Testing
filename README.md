@@ -1,10 +1,10 @@
-# 🚀 Galaxy Impact
+# Galaxy Impact
 
-> **An Android-based space colony management game** — recruit, train, and command a specialized crew to survive system-generated threats in a turn-based environment.
+An Android-based space colony management game — recruit, train, and command a specialized crew to survive system-generated threats in a turn-based environment.
 
 ---
 
-## 👥 Team Members
+## Team Members
 
 | Name | Email | Student ID |
 |------|-------|------------|
@@ -14,17 +14,17 @@
 
 ---
 
-## 🎯 Goal
+## Goal
 
 Survive **30 days** and defeat the final boss.
 
 ---
 
-## ⚔️ Battle Mechanics
+## Battle Mechanics
 
-- **Turn-based** combat system
+- Turn-based combat system
 - A coin flip at the start of each battle determines who moves first (heads = crew, tails = threat)
-- Every unit can perform **1 move** per turn
+- Every unit can perform 1 move per turn
 
 ### Difficulty Modifiers
 
@@ -35,11 +35,11 @@ Survive **30 days** and defeat the final boss.
 | Hard       | +30%             |
 | Insane     | +50%             |
 
-> ⚠️ Every **10 days**, a boss encounter is forced. Warnings appear on Days 9, 19, and 29.
+Every 10 days, a boss encounter is forced. Warnings appear on Days 9, 19, and 29.
 
 ---
 
-## 🧑‍🚀 Crew Members
+## Crew Members
 
 All crew level from **0 → 3**. XP required: `6 / 10 / 16` per level.
 
@@ -90,7 +90,7 @@ All crew level from **0 → 3**. XP required: `6 / 10 / 16` per level.
 
 ---
 
-## ⚡ Energy System
+## Energy System
 
 | Action        | Energy Cost | Notes         |
 |---------------|-------------|---------------|
@@ -101,29 +101,29 @@ All crew level from **0 → 3**. XP required: `6 / 10 / 16` per level.
 
 ---
 
-## 🏠 Base Facilities
+## Base Facilities
 
-### 🏋️ Simulator (Training)
-Select crew members to train — each gains **+2 XP**.
+### Simulator (Training)
+Select crew members to train — each gains +2 XP.
 
-### 🏥 Medbay
+### Medbay
 - Queue injured crew members for recovery
-- Recovers **full HP** per crew member
-- Cost: **2 energy per crew**
+- Recovers full HP per crew member
+- Cost: 2 energy per crew
 
-### 🛸 Missions
-- Deploy a group of **3 crew members** (5 for boss missions on Days 10, 20, 30)
-- **Rewards on success:**
+### Missions
+- Deploy a group of 3 crew members (5 for boss missions on Days 10, 20, 30)
+- Rewards on success:
   - +2 Credits
   - +6 XP for each surviving crew member
-- **Failure:** Each crew member who participated loses 1 level
+- Failure: Each crew member who participated loses 1 level
 - Crew at 0 HP are sent to the medbay queue
-- **Item drops (15% chance each):**
-  - 🧪 ATK Potion: +2 ATK for 3 turns (1 crew)
-  - 💉 HP Potion: +3 max HP (1 crew)
-  - 🛡️ DEF Potion: -1 damage taken (1 crew)
+- Item drops (15% chance each):
+  -  ATK Potion: +2 ATK for 3 turns (1 crew)
+  -  HP Potion: +3 max HP (1 crew)
+  -  DEF Potion: -1 damage taken (1 crew)
 
-### 🧑‍💼 Recruit
+###  Recruit
 Hire new crew members using credits:
 
 | Class      | Cost    |
@@ -134,17 +134,17 @@ Hire new crew members using credits:
 | Scientist  | 3 credits |
 | Engineer   | 3 credits |
 
-**Initial Credits:** `10`
+Initial Credits: `10`
 
-### 🏘️ Quarters
+### Quarters
 Assign crew to missions, the simulator, or the medbay.
 
-### 🛒 Black Market
+### Black Market
 Buy potions for **1 credit each**.
 
 ---
 
-## 👾 Threat Stats
+## Threat Stats
 
 ### Normal Threats
 | Stat        | Formula |
@@ -163,7 +163,7 @@ Buy potions for **1 credit each**.
 
 ---
 
-## 📊 Statistics
+## Statistics
 
 Track your colony's performance:
 - Total Crew
@@ -175,14 +175,14 @@ Track your colony's performance:
 
 ---
 
-## 🔄 Other Actions
+## Other Actions
 
 - **Finish Day** — End the current day and advance to the next
 - **Restart Game** — Reset and start a new run
 
 ---
 
-## ✨ Bonus Features
+## Bonus Features
 
 - RecycleView
 - Crew Images
@@ -193,6 +193,21 @@ Track your colony's performance:
 - Larger Squads
 - Data Storage & Loading
 - Custom Features (potions, skill points, days, boss fights)
+- Save and load
+  
+---
+
+## AI usage
+
+We use AI to help us normalize and to make sure that the stats are the same as the docs. We also use AI to help us with the UI implementation, mostly with fragmentation and recycler view.
+
+---
+## Work distribution
+
+Quan: UML diagram, crew members, threats, bone structure for the program
+Minh: UI, shop, items, Game Core
+Bach: Statistic for the game (crew+threat stats, items, missions), battle mechanics
+
 
 ---
 
