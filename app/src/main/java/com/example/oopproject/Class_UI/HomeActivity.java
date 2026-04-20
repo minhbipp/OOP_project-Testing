@@ -51,6 +51,18 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(new Intent(this, ShopActivity.class));
         });
 
+        findViewById(R.id.btn_save).setOnClickListener(v -> {
+            Intent intent = new Intent(this, SaveLoadActivity.class);
+            intent.putExtra("isSaveMode", true);
+            startActivity(intent);
+        });
+
+        findViewById(R.id.btn_load).setOnClickListener(v -> {
+            Intent intent = new Intent(this, SaveLoadActivity.class);
+            intent.putExtra("isSaveMode", false);
+            startActivityForResult(intent, 100);
+        });
+
         findViewById(R.id.btn_restart).setOnClickListener(v -> {
             GameManager.resetGame(this);
             Intent intent = new Intent(this, DifficultySelectionActivity.class);
@@ -103,9 +115,19 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100 && resultCode == RESULT_OK) {
+            updateCounts();
+        }
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
-        // Auto-save when leaving the home screen
+        // You can keep the old binary auto-save or implement a JSON one. 
+        // For now, let's just use the existing one to avoid breaking things, 
+        // but manual saves will use the new JSON system.
         GameManager.getInstance().saveGame(this);
     }
 

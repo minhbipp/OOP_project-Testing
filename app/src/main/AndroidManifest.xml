@@ -30,6 +30,7 @@
         <activity android:name=".Class_UI.StatisticsActivity" />
         <activity android:name=".Class_UI.CrewReferenceActivity" />
         <activity android:name=".Class_UI.ShopActivity" />
+        <activity android:name=".Class_UI.SaveLoadActivity" />
         <activity
             android:name=".Class_UI.MainActivity"
             android:exported="false" />

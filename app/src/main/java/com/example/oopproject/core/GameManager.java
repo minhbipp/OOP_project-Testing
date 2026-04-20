@@ -198,6 +198,28 @@ public class GameManager implements Serializable {
         }
     }
 
+    public Map<Integer, CrewMember> getCrewMap() { return crewMap; }
+    public int getNextId() { return nextId; }
+    public int getTotalMissions() { return totalMissions; }
+    public int getTotalWins() { return totalWins; }
+    public int getTotalRecruited() { return totalRecruited; }
+    public int getCurrentDay() { return currentDay; }
+    public int getEnergy() { return energy; }
+    public int getCredits() { return credits; }
+
+    public void loadFromSaveData(SaveData data) {
+        this.crewMap = data.crewMap;
+        this.nextId = data.nextId;
+        this.inventory = data.inventory;
+        this.totalMissions = data.totalMissions;
+        this.totalWins = data.totalWins;
+        this.totalRecruited = data.totalRecruited;
+        this.difficulty = Difficulty.valueOf(data.difficulty);
+        this.currentDay = data.currentDay;
+        this.energy = data.energy;
+        this.credits = data.credits;
+    }
+
     public List<CrewMember> getCrewList() {
         return new ArrayList<>(crewMap.values());
     }
