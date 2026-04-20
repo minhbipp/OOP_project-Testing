@@ -25,8 +25,6 @@ Survive **30 days** and defeat the final boss.
 - **Turn-based** combat system
 - A coin flip at the start of each battle determines who moves first (heads = crew, tails = threat)
 - Every unit can perform **1 move** per turn
-- **Basic attacks** earn 1 SP; **abilities** cost SP
-- Initial SP: `5` | Max SP: `10`
 
 ### Difficulty Modifiers
 
@@ -52,7 +50,7 @@ All crew level from **0 → 3**. XP required: `6 / 10 / 16` per level.
 | ATK  | 5   | 8   | 10  | 15  |
 
 - **Basic Attack:** Hits 1 selected + 2 random threats
-- **Skill – Extra Attack** (-1 SP, 2-turn cooldown): Next attack deals an additional `20% / 25% / 30% / 40%` ATK to a random threat
+- **Skill – Extra Attack** ( 2-turn cooldown): Next attack deals an additional `20% / 25% / 30% / 40%` ATK to a random threat
 
 ### Engineer
 | Stat | Lv0 | Lv1 | Lv2 | Lv3 |
@@ -61,7 +59,7 @@ All crew level from **0 → 3**. XP required: `6 / 10 / 16` per level.
 | ATK  | 2   | 3   | 4   | 5   |
 
 - **Basic Attack:** Hits 1 selected threat
-- **Skill – Boost Defense** (-1 SP, 2-turn cooldown): Increases a crew member's max HP by 20%
+- **Skill – Boost Defense** ( 2-turn cooldown): Increases a crew member's max HP by 20%
 
 ### Medic
 | Stat | Lv0 | Lv1 | Lv2 | Lv3 |
@@ -70,7 +68,7 @@ All crew level from **0 → 3**. XP required: `6 / 10 / 16` per level.
 | ATK  | 1   | 2   | 3   | 4   |
 
 - **Basic Attack:** Hits 1 selected threat
-- **Skill – Heal** (-1 SP, 2-turn cooldown): Recovers `3 / 5 / 8 / 10` HP for 1 selected crew member
+- **Skill – Heal** ( 2-turn cooldown): Recovers `3 / 5 / 8 / 10` HP for 1 selected crew member
 
 ### Scientist
 | Stat | Lv0 | Lv1 | Lv2 | Lv3 |
@@ -79,7 +77,7 @@ All crew level from **0 → 3**. XP required: `6 / 10 / 16` per level.
 | ATK  | 2   | 3   | 4   | 5   |
 
 - **Basic Attack:** Hits 1 selected threat
-- **Skill – Boost Attack** (-1 SP, 2-turn cooldown): Increases 1 crew member's ATK by `1 / 2 / 3 / 4` for 2 turns
+- **Skill – Boost Attack** ( 2-turn cooldown): Increases 1 crew member's ATK by `1 / 2 / 3 / 4` for 2 turns
 
 ### Soldier
 | Stat | Lv0 | Lv1 | Lv2 | Lv3 |
