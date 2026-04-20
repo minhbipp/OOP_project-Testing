@@ -14,8 +14,6 @@ public abstract class CrewMember implements Serializable {
     protected int maxHp;
     protected int damage;
     protected int resilience = 0;
-    protected int sp = 5;
-    protected int maxSp = 10;
     protected CrewLocation location = CrewLocation.QUARTERS;
 
     public int skillCooldown = 0;
@@ -59,14 +57,6 @@ public abstract class CrewMember implements Serializable {
         this.hp = Math.min(maxHp, this.hp + amount);
     }
 
-    public void useSp(int amount) {
-        this.sp = Math.max(0, this.sp - amount);
-    }
-
-    public void gainSp(int amount) {
-        this.sp = Math.min(maxSp, this.sp + amount);
-    }
-
     public void enterMedbay() {
         this.location = CrewLocation.MEDBAY;
         // Penalty changed: No longer loses level, but resets exp to 0
@@ -76,7 +66,6 @@ public abstract class CrewMember implements Serializable {
 
     public void regenerate() {
         this.hp = this.maxHp;
-        this.sp = 5; // Reset SP to initial
     }
 
     public void resetCombatBuffs() {
@@ -148,8 +137,6 @@ public abstract class CrewMember implements Serializable {
     public int getMaxHp() { return maxHp; }
     public int getDamage() { return damage; }
     public int getResilience() { return resilience; }
-    public int getSp() { return sp; }
-    public int getMaxSp() { return maxSp; }
 
     public int getAttackPower() { return damage + tempAtkBonus; }
 
@@ -157,5 +144,4 @@ public abstract class CrewMember implements Serializable {
     public void setMaxHp(int maxHp) { this.maxHp = maxHp; }
     public void setDamage(int damage) { this.damage = damage; }
     public void setResilience(int resilience) { this.resilience = resilience; }
-    public void setSp(int sp) { this.sp = Math.max(0, Math.min(sp, maxSp)); }
 }

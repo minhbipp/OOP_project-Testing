@@ -14,11 +14,8 @@ public class Pilot extends CrewMember {
 
     public void extraAttack(Threat target) {
         // Deals % of damage as an additional attack
-        if (sp >= 1) {
-            useSp(1);
-            int extraDmg = (int) (damage * extraAttackPercent[level]);
-            target.takeNormalDamage(extraDmg);
-        }
+        int extraDmg = (int) (damage * extraAttackPercent[level]);
+        target.takeNormalDamage(extraDmg);
     }
 
     @Override
@@ -28,6 +25,6 @@ public class Pilot extends CrewMember {
 
     @Override
     public String getSpecialSkillDescription() {
-        return "(-1SP) performs an additional attack = " + (int)(extraAttackPercent[level] * 100) + "% Atk to a random threat.";
+        return "performs an additional attack = " + (int)(extraAttackPercent[level] * 100) + "% Atk to a random threat.";
     }
 }

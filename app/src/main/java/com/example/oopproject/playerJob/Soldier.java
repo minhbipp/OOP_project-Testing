@@ -36,6 +36,6 @@ public class Soldier extends CrewMember {
 
     @Override
     public String getSpecialSkillDescription() {
-        return "(-0SP) If HP < 50%, AOE 10 dmg to all and self Atk +" + enrageAtkBuff[level] + " (Once per battle)";
+        return "If HP < 50%, AOE 10 dmg to all and self Atk +" + enrageAtkBuff[level] + " (Once per battle)";
     }
 }

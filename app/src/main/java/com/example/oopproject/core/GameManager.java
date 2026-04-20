@@ -161,10 +161,12 @@ public class GameManager implements Serializable {
     }
 
     public boolean isGameOver() {
-        return currentDay > 30;
+        return (currentDay > 30) || (currentDay > 1 && crewMap.isEmpty());
     }
 
-    private GameManager() {}
+    private GameManager() {
+        // Initial state is empty; crew will be added by startNewGame or difficulty selection
+    }
 
     public static synchronized GameManager getInstance() {
         if (instance == null) {

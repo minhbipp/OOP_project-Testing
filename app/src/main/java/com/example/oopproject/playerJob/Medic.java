@@ -11,11 +11,8 @@ public class Medic extends CrewMember {
     }
 
     public void heal(CrewMember member) {
-        if (sp >= 1) {
-            useSp(1);
-            // Recovers HP based on level progression
-            member.setHp(member.getHp() + healProgression[level]);
-        }
+        // Recovers HP based on level progression
+        member.setHp(member.getHp() + healProgression[level]);
     }
 
     @Override
@@ -25,6 +22,6 @@ public class Medic extends CrewMember {
 
     @Override
     public String getSpecialSkillDescription() {
-        return "(-1SP) Recover " + healProgression[level] + " HP for 1 selected crew.";
+        return "Recover " + healProgression[level] + " HP for 1 selected crew.";
     }
 }

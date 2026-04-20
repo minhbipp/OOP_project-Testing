@@ -11,12 +11,9 @@ public class Scientist extends CrewMember {
     }
 
     public void boostAttack(CrewMember member) {
-        if (sp >= 1) {
-            useSp(1);
-            // Logic for "for 2 turns" needs to be handled in the battle loop/buff system
-            // For now, we apply the boost.
-            member.damage += boostProgression[level];
-        }
+        // Logic for "for 2 turns" needs to be handled in the battle loop/buff system
+        // For now, we apply the boost.
+        member.damage += boostProgression[level];
     }
 
     @Override
@@ -26,6 +23,6 @@ public class Scientist extends CrewMember {
 
     @Override
     public String getSpecialSkillDescription() {
-        return "(-1SP) Increase " + boostProgression[level] + " Atk to 1 selected crew for 2 turns";
+        return "Increase " + boostProgression[level] + " Atk to 1 selected crew for 2 turns";
     }
 }

@@ -10,13 +10,10 @@ public class Engineer extends CrewMember {
     }
 
     public void boostDefense(CrewMember member) {
-        if (sp >= 1) {
-            useSp(1);
-            // Increases a crew member's max HP by 20%
-            int boost = (int) (member.getMaxHp() * 0.2);
-            member.setMaxHp(member.getMaxHp() + boost);
-            member.setHp(member.getHp() + boost); // Give them the health to match the new cap
-        }
+        // Increases a crew member's max HP by 20%
+        int boost = (int) (member.getMaxHp() * 0.2);
+        member.setMaxHp(member.getMaxHp() + boost);
+        member.setHp(member.getHp() + boost); // Give them the health to match the new cap
     }
 
     @Override
@@ -26,6 +23,6 @@ public class Engineer extends CrewMember {
 
     @Override
     public String getSpecialSkillDescription() {
-        return "(-1SP) increase a crew member’s maxHP by 20%";
+        return "increase a crew member’s maxHP by 20%";
     }
 }

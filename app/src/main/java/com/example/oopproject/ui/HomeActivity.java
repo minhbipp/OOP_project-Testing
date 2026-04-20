@@ -65,13 +65,35 @@ public class HomeActivity extends AppCompatActivity {
 
     private void checkBossWarning() {
         GameManager gm = GameManager.getInstance();
-        if (gm.currentDay == 19 || gm.currentDay == 29 || gm.currentDay == 39) {
+        if (gm.currentDay == 9 || gm.currentDay == 19 || gm.currentDay == 29) {
             android.widget.Toast.makeText(this, "WARNING: BOSS ENCOUNTER TOMORROW!", android.widget.Toast.LENGTH_LONG).show();
         } else if (gm.isBossDay()) {
             android.widget.Toast.makeText(this, "BOSS IS HERE! Prepare your 5 best crew!", android.widget.Toast.LENGTH_LONG).show();
-        } else if (gm.isGameOver()) {
-            android.widget.Toast.makeText(this, "CONGRATULATIONS! You survived 40 days!", android.widget.Toast.LENGTH_LONG).show();
         }
+
+        if (gm.isGameOver()) {
+            if (gm.getCrewList().isEmpty()) {
+                showGameOverDialog("GAME OVER", "All crew members have been lost. The mission failed.");
+            } else if (gm.currentDay > 30) {
+                showGameOverDialog("VICTORY!", "Congratulations! You have defeated the Omega Entity and survived all 30 days!");
+            }
+        }
+    }
+
+    private void showGameOverDialog(String title, String message) {
+        new android.app.AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message + "\n\nWould you like to restart?")
+                .setCancelable(false)
+                .setPositiveButton("Restart", (dialog, which) -> {
+                    GameManager.resetGame(this);
+                    Intent intent = new Intent(this, DifficultySelectionActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
+                })
+                .setNegativeButton("Exit", (dialog, which) -> finish())
+                .show();
     }
 
     @Override

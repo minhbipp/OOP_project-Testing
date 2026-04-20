@@ -250,31 +250,31 @@ public class MissionBattleActivity extends AppCompatActivity {
             return;
         }
 
-        while (currentMemberIndex < squad.size() && !squad.get(currentMemberIndex).isAlive()) {
-            currentMemberIndex++;
+        // Wrap or find next alive
+        if (currentMemberIndex >= squad.size()) {
+            currentMemberIndex = 0;
         }
 
-        if (currentMemberIndex >= squad.size()) {
-            isCrewPhase = false;
-            addLog("--- Threat Turn ---");
-            new Handler().postDelayed(this::triggerThreatTurn, 1000);
-            return;
+        int startIdx = currentMemberIndex;
+        int attempts = 0;
+        while (!squad.get(currentMemberIndex).isAlive() && attempts < squad.size()) {
+            currentMemberIndex = (currentMemberIndex + 1) % squad.size();
+            attempts++;
         }
 
         CrewMember active = squad.get(currentMemberIndex);
         layoutActions.setVisibility(View.VISIBLE);
-        textActiveMember.setText(active.getId() + "'s Turn (HP: " + active.getHp() + " | SP: " + active.getSp() + ")");
+        textActiveMember.setText(active.getId() + "'s Turn (HP: " + active.getHp() + ")");
         
         if (active.skillCooldown > 0) active.skillCooldown--;
         
-        btnSkill.setEnabled(active.skillCooldown == 0 && (active.getSp() >= 1 || (active instanceof Soldier && ((Soldier)active).canEnrage())));
+        btnSkill.setEnabled(active.skillCooldown == 0);
         textSkillInfo.setText("Skill: " + active.getSpecialSkillName() + (active.skillCooldown > 0 ? " (CD: " + active.skillCooldown + ")" : ""));
     }
 
     private void handleAttack() {
         layoutActions.setVisibility(View.GONE);
         CrewMember active = squad.get(currentMemberIndex);
-        active.gainSp(1);
         // Damage is already calculated minus resilience in takeNormalDamage, but handleAttack was doing it twice.
         // Let's pass the raw damage and let the threat handle its own resilience.
         int damage = active.getAttackPower();
@@ -282,7 +282,7 @@ public class MissionBattleActivity extends AppCompatActivity {
         
         // Calculate what was actually dealt for the log
         int actualDealt = Math.max(0, damage - threat.getResilience());
-        addLog(active.getId() + " attacks! Damage: " + actualDealt + " (+1 SP)");
+        addLog(active.getId() + " attacks! Damage: " + actualDealt);
 
         updateThreatUI();
         updateAllCrewUI();
@@ -311,21 +311,15 @@ public class MissionBattleActivity extends AppCompatActivity {
             active.skillCooldown = 2; // Pilot 2 turn CD
             addLog(active.getId() + " uses EXTRA ATTACK.");
         } else if (active instanceof Scientist) {
-            if (active.getSp() >= 1) {
-                CrewMember target = findMostWounded();
-                target.tempAtkBonus += 2 + active.getLevel();
-                active.useSp(1);
-                active.skillCooldown = 2; // Scientist 2 turn CD
-                addLog(active.getId() + " boosts " + target.getId() + "'s Attack!");
-            }
+            CrewMember target = findMostWounded();
+            target.tempAtkBonus += 2 + active.getLevel();
+            active.skillCooldown = 2; // Scientist 2 turn CD
+            addLog(active.getId() + " boosts " + target.getId() + "'s Attack!");
         } else if (active instanceof Engineer) {
-            if (active.getSp() >= 1) {
-                CrewMember target = findMostWounded();
-                target.tempResilienceBonus += 1 + (active.getLevel() / 2);
-                active.useSp(1);
-                active.skillCooldown = 4; // Engineer 4 turn CD
-                addLog(active.getId() + " boosts " + target.getId() + "'s Resilience!");
-            }
+            CrewMember target = findMostWounded();
+            target.tempResilienceBonus += 1 + (active.getLevel() / 2);
+            active.skillCooldown = 4; // Engineer 4 turn CD
+            addLog(active.getId() + " boosts " + target.getId() + "'s Resilience!");
         }
         updateAllCrewUI();
         updateThreatUI();
@@ -371,6 +365,7 @@ public class MissionBattleActivity extends AppCompatActivity {
 
     private void finishCrewMemberTurn() {
         currentMemberIndex++;
+        isCrewPhase = false;
         new Handler().postDelayed(this::nextTurn, 800);
     }
 
@@ -385,12 +380,21 @@ public class MissionBattleActivity extends AppCompatActivity {
             endMission(false);
             return;
         }
+        
+        addLog("--- Threat Turn ---");
         CrewMember target = alive.get(random.nextInt(alive.size()));
-        threat.retaliate(target);
-        addLog(threat.getName() + " attacks " + target.getId() + "!");
+        
+        // 70% Hit Chance
+        if (random.nextInt(100) < 70) {
+            threat.retaliate(target);
+            addLog(threat.getName() + " attacks " + target.getId() + "!");
+        } else {
+            addLog(threat.getName() + " attacks " + target.getId() + " but MISSES!");
+        }
+
         updateAllCrewUI();
+        
         isCrewPhase = true;
-        currentMemberIndex = 0;
         new Handler().postDelayed(this::nextTurn, 1000);
     }
 
@@ -441,6 +445,13 @@ public class MissionBattleActivity extends AppCompatActivity {
             addLog("FAILED.");
             for (CrewMember m : squad) { m.loseLevel(); if (!m.isAlive()) { m.setHp(1); m.enterMedbay(); } }
         }
+
+        // If it's a boss day, move to the next day immediately after the fight
+        if (gm.isBossDay()) {
+            addLog("Boss encounter concluded. Moving to next day...");
+            gm.nextDay();
+        }
+
         new Handler().postDelayed(this::finish, 2000);
     }
 }
